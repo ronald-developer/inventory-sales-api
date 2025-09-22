@@ -4,22 +4,11 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace InventorySales.EntityFramework.Configurations
 {
-    public class RoleConfiguration : IEntityTypeConfiguration<IdentityRole>
+    public class RoleConfiguration : IEntityTypeConfiguration<AppRole>
     {
-        public void Configure(EntityTypeBuilder<IdentityRole> builder)
+        public void Configure(EntityTypeBuilder<AppRole> builder)
         {
-            builder.HasData(
-                    new IdentityRole
-                    {
-                        Name = "Administrator",
-                        NormalizedName = "ADMINISTRATOR"
-                    },
-                    new IdentityRole
-                    {
-                        Name = "User",
-                        NormalizedName = "USER"
-                    }
-                );
+          
         }
     }
 }

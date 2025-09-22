@@ -7,21 +7,25 @@ using Microsoft.EntityFrameworkCore;
 
 namespace InventorySales.EntityFramework
 {
-    public class InventorySalesDbContext : IdentityDbContext<AppUser>
+    public class InventorySalesDbContext : IdentityDbContext<AppUser, AppRole, string>
     {
-        public InventorySalesDbContext(DbContextOptions options) : base(options)
+        public InventorySalesDbContext(DbContextOptions<InventorySalesDbContext> options) : base(options)
         {
         }
 
         // public DbSet<Expense> Expenses { get; set; }
         // public DbSet<ExpenseCategory> ExpenseCategories { get; set; }
-        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        protected override void OnModelCreating(ModelBuilder builder)
         {
-            base.OnModelCreating(modelBuilder);
+            base.OnModelCreating(builder);
 
-            ApplyBaseConfiguration(modelBuilder);
+            builder.HasDefaultSchema("identity");
 
-            modelBuilder.ApplyConfiguration(new RoleConfiguration());
+            builder.ApplyConfigurationsFromAssembly(typeof(AppUserConfiguration).Assembly);
+
+            builder.ApplyConfiguration(new RoleConfiguration());
+
+            ApplyBaseConfiguration(builder);
         }
 
         private static void ApplyBaseConfiguration(ModelBuilder modelBuilder)
