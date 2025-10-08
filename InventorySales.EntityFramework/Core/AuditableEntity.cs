@@ -5,8 +5,8 @@
     /// </summary>
     public abstract class AuditableEntity
     {
-        public int CreatedByUserId { get; set; }
-        public int? UpdatedByUserId { get; set; }
+        public string CreatedByUserId { get; set; }
+        public string? UpdatedByUserId { get; set; }
         /// <summary>
         /// Timestamp when the asset was added to the system.
         /// </summary>

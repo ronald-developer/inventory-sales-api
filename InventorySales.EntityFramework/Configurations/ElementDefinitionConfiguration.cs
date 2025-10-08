@@ -28,9 +28,10 @@ namespace InventorySales.EntityFramework.Configurations
                        .HasMaxLength(50)
                        .IsRequired();
 
-                builder.Property(e => e.DataType)
-                       .HasMaxLength(50)
-                       .IsRequired();
+                builder.HasOne(ed => ed.DataType)
+                   .WithMany(dt => dt.ElementDefinitions)
+                   .HasForeignKey(ed => ed.DataTypeId)
+                   .OnDelete(DeleteBehavior.Restrict);
 
                 builder.HasOne(ed => ed.MetadataSchemaVersion)
                        .WithMany(msv => msv.ElementDefinitions)
