@@ -29,6 +29,10 @@ namespace InventorySales.EntityFramework.Configurations
             builder.HasOne(s => s.Customer)
                    .WithMany(c => c.Sales)
                    .HasForeignKey(s => s.CustomerId);
+
+            builder.HasIndex(s => s.AssetId);
+            builder.HasIndex(s => s.CustomerId);
+            builder.HasIndex(s => s.SaleDate);
         }
     }
 }

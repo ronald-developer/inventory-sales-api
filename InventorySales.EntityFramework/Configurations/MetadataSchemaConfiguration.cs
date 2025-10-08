@@ -29,7 +29,7 @@ namespace InventorySales.EntityFramework.Configurations
             builder.HasMany(m => m.ElementDefinitions)
                 .WithOne(e => e.MetadataSchemaVersion)
                 .HasForeignKey(e => e.MetadataSchemaVersionId)
-                .OnDelete(DeleteBehavior.Cascade);
+                .OnDelete(DeleteBehavior.Restrict);
 
             builder.HasMany(m => m.Assets)
                 .WithOne(a => a.MetadataSchemaVersion)
