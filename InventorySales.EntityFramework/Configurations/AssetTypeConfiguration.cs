@@ -22,7 +22,7 @@ namespace InventorySales.EntityFramework.Configurations
             builder.HasMany(at => at.Assets)
                 .WithOne(a => a.AssetType)
                 .HasForeignKey(a => a.AssetTypeId)
-                .OnDelete(DeleteBehavior.Restrict); // Prevent cascade delete
+                .OnDelete(DeleteBehavior.Restrict); // Prevent cascade delete            
         }
     }
 }

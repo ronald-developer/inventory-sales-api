@@ -1,6 +1,6 @@
 ﻿namespace InventorySales.EntityFramework.Core
 {
-    public class AssetType
+    public class AssetType: AuditableEntity
     {
         /// <summary>
         /// Primary key.

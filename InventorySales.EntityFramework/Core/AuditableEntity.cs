@@ -10,7 +10,7 @@
         /// <summary>
         /// Timestamp when the asset was added to the system.
         /// </summary>
-        public DateTime CreatedAt { get; set; }
+        public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
         public AppUser CreatedByUser { get; set; }
 
         /// <summary>

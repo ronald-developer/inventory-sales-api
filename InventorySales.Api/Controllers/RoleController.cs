@@ -1,16 +1,10 @@
 ﻿using AutoMapper;
-using Azure.Core;
 using InventorySales.Api.Attributes;
-using InventorySales.Api.DTO.AccountManager.Requests;
-using InventorySales.Api.DTO.AccountManager.Responses;
-using InventorySales.Api.DTO.RoleManager.Requests;
-using InventorySales.Api.DTO.RoleManager.Responses;
+using InventorySales.Api.DTO.Role.Requests;
+using InventorySales.Api.DTO.Role.Responses;
 using InventorySales.Contracts;
 using InventorySales.EntityFramework;
-using InventorySales.Implementations;
-using InventorySales.Models.AccountManager;
 using InventorySales.Models.RoleManager;
-using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
 
@@ -31,12 +25,13 @@ namespace InventorySales.Api.Controllers
 
         [HttpPost]
         [Route("create")]
+        [Authorize]
         [ApiResponseDocumentation(
             HttpStatusCode.Unauthorized,
             HttpStatusCode.InternalServerError)]
         public async Task<PostCreateRoleResponse> CreateRole([FromBody] PostCreateRoleRequest request)
         {
-            AppRole response = await roleManagerService.CreateRole(mapper.Map<RoleModel>(request));
+            AppRole response = await roleManagerService.Create(mapper.Map<RoleModel>(request));
 
             return new PostCreateRoleResponse(mapper, response);
         }
@@ -44,6 +39,7 @@ namespace InventorySales.Api.Controllers
         // PUT api/roles
         [HttpPut]
         [Route("update/{id}")]
+        [Authorize]
         [ApiResponseDocumentation(
             HttpStatusCode.BadRequest,
             HttpStatusCode.NotFound,
@@ -52,7 +48,7 @@ namespace InventorySales.Api.Controllers
         public async Task<PostUpdateRoleResponse> UpdateRole([FromRoute] Guid id, [FromBody] PostCreateRoleRequest request)
         {
 
-            AppRole response = await roleManagerService.UpdateRole(id, mapper.Map<RoleModel>(request));
+            AppRole response = await roleManagerService.Update(id, mapper.Map<RoleModel>(request));
 
             return new PostUpdateRoleResponse(mapper, response);
         }
@@ -60,13 +56,14 @@ namespace InventorySales.Api.Controllers
         // DELETE api/roles/{id}
         [HttpDelete]
         [Route("update/{id}")]
+        [Authorize]
         [ApiResponseDocumentation(
             HttpStatusCode.NotFound,
             HttpStatusCode.Unauthorized,
             HttpStatusCode.InternalServerError)]
         public async Task<ActionResult> DeleteRole([FromRoute] Guid id)
         {
-            await roleManagerService.DeleteRole(id);
+            await roleManagerService.Delete(id);
             return Ok();
         }
 

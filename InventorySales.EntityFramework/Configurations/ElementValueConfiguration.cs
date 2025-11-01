@@ -21,7 +21,7 @@ namespace InventorySales.EntityFramework.Configurations
 
             builder.HasOne(ev => ev.ElementDefinition)
                    .WithMany()
-                   .HasForeignKey(ev => ev.ElementDefinitionId)
+                   .HasForeignKey(ev => ev.ElementDefinitionId)                   
                    .OnDelete(DeleteBehavior.Restrict); // Prevent cascade delete
 
             builder.HasIndex(ev => ev.ElementDefinitionId);

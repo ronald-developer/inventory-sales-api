@@ -16,6 +16,7 @@ namespace InventorySales.Implementations
     public class JwtManager : IJwtManager
     {
         private readonly UserManager<AppUser> userManager;
+        private readonly TokenValidationParameters tokenValidationParameters;
         private readonly JwtSettings jwtSettings;
         private readonly IConfiguration configuration;
         private readonly IdentityTokenSettings identityTokenSettings;
@@ -23,9 +24,11 @@ namespace InventorySales.Implementations
         public JwtManager(
             UserManager<AppUser> userManager,
             IOptions<JwtSettings> jwtSettings,
-            IOptions<IdentityTokenSettings> identityTokenSettings)
+            IOptions<IdentityTokenSettings> identityTokenSettings,
+            TokenValidationParameters tokenValidationParameters)
         {
             this.userManager = userManager;
+            this.tokenValidationParameters = tokenValidationParameters;
             this.jwtSettings = jwtSettings.Value;
             this.identityTokenSettings = identityTokenSettings.Value;
         }
@@ -52,14 +55,14 @@ namespace InventorySales.Implementations
                 new Claim(ClaimTypes.System, ApplicationConstants.SystemName),
                 new Claim("uid", user.Id),
             }.Union(userClaims).Union(roleClaims);
+
             JwtSecurityToken securityToken = new JwtSecurityToken(
-                    issuer: jwtSettings.Issuer,
-                    audience: jwtSettings.Audience,
+                    issuer: "InventorySales",
+                    audience: "InventorySalesClient",
                     claims: claims,
                     expires: DateTime.Now.AddMinutes(Convert.ToInt32(jwtSettings.DurationInMinutes)),
                     signingCredentials: credentials
             );
-
             return new JwtSecurityTokenHandler().WriteToken(securityToken);
         }
 
@@ -72,20 +75,16 @@ namespace InventorySales.Implementations
             return newToken;
         }
 
-        public static ClaimsPrincipal DecodeJwtToken(string token)
+        
+
+        public  ClaimsPrincipal DecodeJwtToken(string token)
         {
             var handler = new JwtSecurityTokenHandler();
-            var jsonToken = handler.ReadToken(token) as JwtSecurityToken;
-
-            if (jsonToken == null)
-            {
-                throw new ArgumentException("Invalid JWT token.");
-            }
-
-            var claims = jsonToken.Claims;
-            var identity = new ClaimsIdentity(claims, "jwt");
-
-            return new ClaimsPrincipal(identity);
+            SecurityToken validatedToken;
+            Console.WriteLine($"ValidIssuer: '{tokenValidationParameters.ValidIssuer}'");
+            Console.WriteLine($"ValidAudience: '{tokenValidationParameters.ValidAudience}'");
+            Console.WriteLine($"SigningKey length: {tokenValidationParameters.IssuerSigningKey?.KeySize}");
+            return handler.ValidateToken(token, tokenValidationParameters, out validatedToken);
         }
     }
 }

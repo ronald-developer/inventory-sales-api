@@ -1,10 +1,10 @@
 ﻿using AutoMapper;
 using InventorySales.Api.Attributes;
-using InventorySales.Api.DTO.AccountManager.Requests;
-using InventorySales.Api.DTO.AccountManager.Responses;
+using InventorySales.Api.DTO.Account.Requests;
+using InventorySales.Api.DTO.Account.Responses;
 using InventorySales.Contracts;
 using InventorySales.Models.AccountManager;
-using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
 
@@ -12,6 +12,7 @@ namespace InventorySales.Api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [AllowAnonymous]
     public class AccountController : ControllerBase
     {
         private readonly IAccountManagerService accountManagerService;
