@@ -1,4 +1,5 @@
 ﻿using InventorySales.EntityFramework;
+using System.Security.Claims;
 
 namespace InventorySales.Contracts
 {
@@ -6,5 +7,6 @@ namespace InventorySales.Contracts
     {
         Task<string> GenerateTokenAsync(AppUser user);
         Task<string> CreateRefreshToken(AppUser user);
+        ClaimsPrincipal DecodeJwtToken(string token);
     }
 }

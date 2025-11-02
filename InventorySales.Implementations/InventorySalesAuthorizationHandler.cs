@@ -1,26 +1,28 @@
-﻿using InventorySales.Models.Authorization;
-using System.Security.Claims;
+﻿using InventorySales.Contracts;
+using InventorySales.Models.Authorization;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
+using Microsoft.IdentityModel.Tokens;
+using System.Security.Claims;
+using System.Text;
 
 namespace InventorySales.Implementations
 {
     public class InventorySalesAuthorizationHandler : AuthorizationHandler<MinimumRolesAuthorizationRequirement>
     {
         private readonly IHttpContextAccessor httpContextAccessor;
+        private readonly IJwtManager jwtManager;
+        private readonly TokenValidationParameters validationParameters;
 
-        public InventorySalesAuthorizationHandler(IHttpContextAccessor httpContextAccessor)
+        public InventorySalesAuthorizationHandler(IHttpContextAccessor httpContextAccessor, IJwtManager jwtManager)
         {
             this.httpContextAccessor = httpContextAccessor;
+            this.jwtManager = jwtManager;
         }
 
         protected override Task HandleRequirementAsync(AuthorizationHandlerContext context, MinimumRolesAuthorizationRequirement requirement)
         {
-            string token = httpContextAccessor.HttpContext.Request.Headers["Authorization"].FirstOrDefault()?.Split(" ").Last();
-
-            ClaimsPrincipal decodedToken = JwtManager.DecodeJwtToken(token);
-
-            Claim userSystemClaim = decodedToken.Claims.FirstOrDefault(x => x.Type == ClaimTypes.System); // gets the system claim & make sure that this user is intended for this app
+            Claim userSystemClaim = context.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.System); // gets the system claim & make sure that this user is intended for this app
 
             if (userSystemClaim != null && (!requirement.MinimumAllowedRoles.Any() || requirement.MinimumAllowedRoles.Any(role => context.User.IsInRole(role))))
             {

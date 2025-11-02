@@ -7,6 +7,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="8.0.1" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\InventorySales.EntityFramework\InventorySales.EntityFramework.csproj" />
     <ProjectReference Include="..\InventorySales.Models\InventorySales.Models.csproj" />
   </ItemGroup>

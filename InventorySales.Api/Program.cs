@@ -20,6 +20,7 @@ using Serilog;
 using System.ComponentModel.DataAnnotations;
 using System.Text;
 using ValidationException = InventorySales.Models.ExceptionTypes.ValidationException;
+using AuthorizationMiddleware = InventorySales.Api.Middlewares.AuthorizationMiddleware;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -61,7 +62,7 @@ static void ConfigureMiddlewares(WebApplication app)
 
     app.UseMiddleware<ExceptionMiddleware>();
 
-    app.UseMiddleware<AuthorizationMiddleware>();
+    //app.UseMiddleware<AuthorizationMiddleware>();
 }
 
 // Add services to the container.
@@ -74,6 +75,26 @@ static void ConfigureServices(WebApplicationBuilder builder)
     builder.Services.Configure<IdentityTokenSettings>(builder.Configuration.GetSection("IdentityTokenSettings"));
 
     builder.Services.Configure<JwtSettings>(builder.Configuration.GetSection("JwtSettings"));
+
+    var jwtSettings = builder.Configuration.GetSection("JwtSettings").Get<JwtSettings>();
+
+    var key = Encoding.UTF8.GetBytes(jwtSettings.Key);
+
+    var tokenValidationParameters = new TokenValidationParameters
+    {
+        ValidateIssuerSigningKey = true,
+        ValidateIssuer = true,
+        ValidateAudience = true,
+        ValidateLifetime = true,
+        ClockSkew = TimeSpan.Zero,
+        ValidIssuer = jwtSettings.Issuer,
+        ValidAudience = jwtSettings.Audience,
+        IssuerSigningKey = new SymmetricSecurityKey(key)
+    };
+
+    builder.Services.AddSingleton(tokenValidationParameters);
+
+    builder.Services.AddInventorySalesServices();
 
     builder.Services.AddIdentityCore<AppUser>()
         .AddRoles<AppRole>()
@@ -128,8 +149,6 @@ static void ConfigureServices(WebApplicationBuilder builder)
 
     builder.Services.AddMappingProfiles();
 
-    builder.Services.AddInventorySalesServices();
-
     builder.Services.AddAuthentication(options =>
     {
         options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -137,19 +156,10 @@ static void ConfigureServices(WebApplicationBuilder builder)
 
     }).AddJwtBearer(options =>
     {
-        options.TokenValidationParameters = new TokenValidationParameters
-        {
-            ValidateIssuerSigningKey = true,
-            ValidateIssuer = true,
-            ValidateAudience = true,
-            ValidateLifetime = true,
-            ClockSkew = TimeSpan.Zero,
-            ValidIssuer = builder.Configuration["JwtSettings:Issuer"],
-            ValidAudience = builder.Configuration["JwtSettings:Audience"],
-            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["JwtSettings:Key"]))
-        };
-
+        options.TokenValidationParameters = tokenValidationParameters;
     });
+
+   
 
     builder.Host.UseSerilog((context, loggerConfiguration) => loggerConfiguration.WriteTo.Console().ReadFrom.Configuration(context.Configuration));
 }
@@ -213,7 +223,7 @@ static void AddControllersApiBehavior(WebApplicationBuilder builder)
 
 static void AddInventorySalesAuthorization(WebApplicationBuilder builder)
 {
-    builder.Services.AddSingleton<IAuthorizationHandler, InventorySalesAuthorizationHandler>();
+    builder.Services.AddScoped<IAuthorizationHandler, InventorySalesAuthorizationHandler>();
 
     AuthorizationPolicy defaultPolicy = new AuthorizationPolicyBuilder()
                     .AddRequirements(new MinimumRolesAuthorizationRequirement())

@@ -134,6 +134,346 @@ namespace InventorySales.EntityFramework.Migrations
                     b.ToTable("Users", "identity");
                 });
 
+            modelBuilder.Entity("InventorySales.EntityFramework.Core.Asset", b =>
+                {
+                    b.Property<int>("AssetId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("AssetId"));
+
+                    b.Property<int>("AssetTypeId")
+                        .HasColumnType("int");
+
+                    b.Property<decimal?>("BasePrice")
+                        .HasColumnType("decimal(18,4)");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("CreatedByUserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<int>("MetadataSchemaVersionId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("UpdatedByUserId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("AssetId");
+
+                    b.HasIndex("AssetTypeId");
+
+                    b.HasIndex("CreatedAt");
+
+                    b.HasIndex("CreatedByUserId");
+
+                    b.HasIndex("MetadataSchemaVersionId");
+
+                    b.HasIndex("UpdatedByUserId");
+
+                    b.ToTable("Assets", "core");
+                });
+
+            modelBuilder.Entity("InventorySales.EntityFramework.Core.AssetType", b =>
+                {
+                    b.Property<int>("AssetTypeId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("AssetTypeId"));
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("CreatedByUserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasMaxLength(250)
+                        .HasColumnType("nvarchar(250)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("UpdatedByUserId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("AssetTypeId");
+
+                    b.HasIndex("CreatedByUserId");
+
+                    b.HasIndex("UpdatedByUserId");
+
+                    b.ToTable("AssetTypes", "core");
+                });
+
+            modelBuilder.Entity("InventorySales.EntityFramework.Core.Customer", b =>
+                {
+                    b.Property<int>("CustomerId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("CustomerId"));
+
+                    b.Property<string>("Address")
+                        .IsRequired()
+                        .HasMaxLength(250)
+                        .HasColumnType("nvarchar(250)");
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("FirstName")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<string>("LastName")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<string>("Phone")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
+
+                    b.HasKey("CustomerId");
+
+                    b.ToTable("Customers", "core");
+                });
+
+            modelBuilder.Entity("InventorySales.EntityFramework.Core.Inventory", b =>
+                {
+                    b.Property<int>("InventoryId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("InventoryId"));
+
+                    b.Property<int>("AssetId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("CreatedByUserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<int>("Quantity")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("UpdatedByUserId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("InventoryId");
+
+                    b.HasIndex("AssetId");
+
+                    b.HasIndex("CreatedByUserId");
+
+                    b.HasIndex("UpdatedByUserId");
+
+                    b.ToTable("Inventories", "core");
+                });
+
+            modelBuilder.Entity("InventorySales.EntityFramework.Metadata.DataType", b =>
+                {
+                    b.Property<int>("DataTypeId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("DataTypeId"));
+
+                    b.Property<string>("TypeName")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<string>("TypeValueSample")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.HasKey("DataTypeId");
+
+                    b.ToTable("DataTypes", "metadata");
+                });
+
+            modelBuilder.Entity("InventorySales.EntityFramework.Metadata.ElementDefinition", b =>
+                {
+                    b.Property<int>("ElementDefinitionId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ElementDefinitionId"));
+
+                    b.Property<int>("DataTypeId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("ElementDescription")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ElementName")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("EntityName")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<bool>("IsApproved")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsRequired")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("Length")
+                        .HasColumnType("int");
+
+                    b.Property<int>("MetadataSchemaVersionId")
+                        .HasColumnType("int");
+
+                    b.HasKey("ElementDefinitionId");
+
+                    b.HasIndex("DataTypeId");
+
+                    b.HasIndex("MetadataSchemaVersionId");
+
+                    b.ToTable("ElementDefinitions", "metadata");
+                });
+
+            modelBuilder.Entity("InventorySales.EntityFramework.Metadata.ElementValue", b =>
+                {
+                    b.Property<int>("ElementValueId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ElementValueId"));
+
+                    b.Property<int?>("AssetId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ElementDefinitionId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("ElementDefinitionId1")
+                        .HasColumnType("int");
+
+                    b.Property<string>("EntityName")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<int>("EntityRecordId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Value")
+                        .IsRequired()
+                        .HasMaxLength(250)
+                        .HasColumnType("nvarchar(250)");
+
+                    b.HasKey("ElementValueId");
+
+                    b.HasIndex("AssetId");
+
+                    b.HasIndex("ElementDefinitionId");
+
+                    b.HasIndex("ElementDefinitionId1");
+
+                    b.HasIndex("EntityName");
+
+                    b.HasIndex("EntityRecordId");
+
+                    b.ToTable("ElementValues", "metadata");
+                });
+
+            modelBuilder.Entity("InventorySales.EntityFramework.Metadata.MetadataSchemaVersion", b =>
+                {
+                    b.Property<int>("MetadataSchemaVersionId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("MetadataSchemaVersionId"));
+
+                    b.Property<string>("EntityName")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<decimal>("Version")
+                        .HasColumnType("decimal(3,2)");
+
+                    b.Property<string>("VersionDescription")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.HasKey("MetadataSchemaVersionId");
+
+                    b.ToTable("MetadataSchemaVersions", "core");
+                });
+
+            modelBuilder.Entity("InventorySales.EntityFramework.Transaction.Sale", b =>
+                {
+                    b.Property<int>("SaleId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("SaleId"));
+
+                    b.Property<int>("AssetId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("CustomerId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("PaymentMethod")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<DateTime>("SaleDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<decimal>("SalePrice")
+                        .HasColumnType("decimal(18,4)");
+
+                    b.HasKey("SaleId");
+
+                    b.HasIndex("AssetId");
+
+                    b.HasIndex("CustomerId");
+
+                    b.HasIndex("SaleDate");
+
+                    b.ToTable("Sales", "transactions");
+                });
+
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
                     b.Property<int>("Id")
@@ -240,6 +580,138 @@ namespace InventorySales.EntityFramework.Migrations
                     b.ToTable("UserTokens", "identity");
                 });
 
+            modelBuilder.Entity("InventorySales.EntityFramework.Core.Asset", b =>
+                {
+                    b.HasOne("InventorySales.EntityFramework.Core.AssetType", "AssetType")
+                        .WithMany("Assets")
+                        .HasForeignKey("AssetTypeId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("InventorySales.EntityFramework.AppUser", "CreatedByUser")
+                        .WithMany()
+                        .HasForeignKey("CreatedByUserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("InventorySales.EntityFramework.Metadata.MetadataSchemaVersion", "MetadataSchemaVersion")
+                        .WithMany("Assets")
+                        .HasForeignKey("MetadataSchemaVersionId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("InventorySales.EntityFramework.AppUser", "UpdatedByUser")
+                        .WithMany()
+                        .HasForeignKey("UpdatedByUserId");
+
+                    b.Navigation("AssetType");
+
+                    b.Navigation("CreatedByUser");
+
+                    b.Navigation("MetadataSchemaVersion");
+
+                    b.Navigation("UpdatedByUser");
+                });
+
+            modelBuilder.Entity("InventorySales.EntityFramework.Core.AssetType", b =>
+                {
+                    b.HasOne("InventorySales.EntityFramework.AppUser", "CreatedByUser")
+                        .WithMany()
+                        .HasForeignKey("CreatedByUserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("InventorySales.EntityFramework.AppUser", "UpdatedByUser")
+                        .WithMany()
+                        .HasForeignKey("UpdatedByUserId");
+
+                    b.Navigation("CreatedByUser");
+
+                    b.Navigation("UpdatedByUser");
+                });
+
+            modelBuilder.Entity("InventorySales.EntityFramework.Core.Inventory", b =>
+                {
+                    b.HasOne("InventorySales.EntityFramework.Core.Asset", "Asset")
+                        .WithMany()
+                        .HasForeignKey("AssetId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("InventorySales.EntityFramework.AppUser", "CreatedByUser")
+                        .WithMany()
+                        .HasForeignKey("CreatedByUserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("InventorySales.EntityFramework.AppUser", "UpdatedByUser")
+                        .WithMany()
+                        .HasForeignKey("UpdatedByUserId");
+
+                    b.Navigation("Asset");
+
+                    b.Navigation("CreatedByUser");
+
+                    b.Navigation("UpdatedByUser");
+                });
+
+            modelBuilder.Entity("InventorySales.EntityFramework.Metadata.ElementDefinition", b =>
+                {
+                    b.HasOne("InventorySales.EntityFramework.Metadata.DataType", "DataType")
+                        .WithMany("ElementDefinitions")
+                        .HasForeignKey("DataTypeId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("InventorySales.EntityFramework.Metadata.MetadataSchemaVersion", "MetadataSchemaVersion")
+                        .WithMany("ElementDefinitions")
+                        .HasForeignKey("MetadataSchemaVersionId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("DataType");
+
+                    b.Navigation("MetadataSchemaVersion");
+                });
+
+            modelBuilder.Entity("InventorySales.EntityFramework.Metadata.ElementValue", b =>
+                {
+                    b.HasOne("InventorySales.EntityFramework.Core.Asset", null)
+                        .WithMany("ElementValues")
+                        .HasForeignKey("AssetId");
+
+                    b.HasOne("InventorySales.EntityFramework.Metadata.ElementDefinition", "ElementDefinition")
+                        .WithMany()
+                        .HasForeignKey("ElementDefinitionId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("InventorySales.EntityFramework.Metadata.ElementDefinition", null)
+                        .WithMany("ElementValues")
+                        .HasForeignKey("ElementDefinitionId1");
+
+                    b.Navigation("ElementDefinition");
+                });
+
+            modelBuilder.Entity("InventorySales.EntityFramework.Transaction.Sale", b =>
+                {
+                    b.HasOne("InventorySales.EntityFramework.Core.Asset", "Asset")
+                        .WithMany("Sales")
+                        .HasForeignKey("AssetId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("InventorySales.EntityFramework.Core.Customer", "Customer")
+                        .WithMany("Sales")
+                        .HasForeignKey("CustomerId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Asset");
+
+                    b.Navigation("Customer");
+                });
+
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
                     b.HasOne("InventorySales.EntityFramework.AppRole", null)
@@ -289,6 +761,40 @@ namespace InventorySales.EntityFramework.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("InventorySales.EntityFramework.Core.Asset", b =>
+                {
+                    b.Navigation("ElementValues");
+
+                    b.Navigation("Sales");
+                });
+
+            modelBuilder.Entity("InventorySales.EntityFramework.Core.AssetType", b =>
+                {
+                    b.Navigation("Assets");
+                });
+
+            modelBuilder.Entity("InventorySales.EntityFramework.Core.Customer", b =>
+                {
+                    b.Navigation("Sales");
+                });
+
+            modelBuilder.Entity("InventorySales.EntityFramework.Metadata.DataType", b =>
+                {
+                    b.Navigation("ElementDefinitions");
+                });
+
+            modelBuilder.Entity("InventorySales.EntityFramework.Metadata.ElementDefinition", b =>
+                {
+                    b.Navigation("ElementValues");
+                });
+
+            modelBuilder.Entity("InventorySales.EntityFramework.Metadata.MetadataSchemaVersion", b =>
+                {
+                    b.Navigation("Assets");
+
+                    b.Navigation("ElementDefinitions");
                 });
 #pragma warning restore 612, 618
         }

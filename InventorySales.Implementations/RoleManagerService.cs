@@ -15,7 +15,7 @@ namespace InventorySales.Implementations
         {
             this._roleManager = roleManager;
         }
-        public async Task<AppRole> CreateRole(RoleModel roleModel)
+        public async Task<AppRole> Create(RoleModel roleModel)
         {
             if (roleModel == null)
                 throw new BadRequestException("Role cannot be null.");
@@ -39,7 +39,7 @@ namespace InventorySales.Implementations
             return role;
         }
 
-        public async Task<AppRole> UpdateRole(Guid id, RoleModel roleModel)
+        public async Task<AppRole> Update(Guid id, RoleModel roleModel)
         {
             if (roleModel == null)
                 throw new BadRequestException("Role cannot be null.");
@@ -59,7 +59,7 @@ namespace InventorySales.Implementations
             return existingRole;
         }
 
-        public async Task DeleteRole(Guid roleId)
+        public async Task Delete(Guid roleId)
         {
             AppRole existingRole = await _roleManager.FindByIdAsync(roleId.ToString());
             if (existingRole == null)
