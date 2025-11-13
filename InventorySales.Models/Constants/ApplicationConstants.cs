@@ -11,6 +11,6 @@ namespace InventorySales.Models.Constants
         /// <summary>
         /// Application system name, added to the user claims as Claims.System
         /// </summary>
-        public static readonly string SystemName = "InventorySalesApp";
+        public const string SystemName = "InventorySalesApp";
     }
 }

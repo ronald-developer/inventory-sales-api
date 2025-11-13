@@ -2,6 +2,7 @@
 using InventorySales.Contracts.Repositories;
 using InventorySales.EntityFramework;
 using InventorySales.EntityFramework.Core;
+using InventorySales.Models.Constants;
 using InventorySales.Models.ExceptionTypes;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
@@ -21,11 +22,19 @@ namespace InventorySales.Implementations.Repositories
 
         public async Task<T> AddAsync(T entity)
         {
-            await dbContext.AddAsync(entity);
+            try
+            {
+                await dbContext.AddAsync(entity);
 
-            await dbContext.SaveChangesAsync();
+                await dbContext.SaveChangesAsync();
 
-            return entity;
+                return entity;
+            }
+            catch (Exception ex)
+            {
+
+                throw new InternalServerException(entity.GetType().Name, ex.InnerException?.Message);
+            }
         }
 
         public async Task DeleteAsync(string key, int id)
@@ -56,7 +65,7 @@ namespace InventorySales.Implementations.Repositories
 
         public async Task<List<T>> GetAllAsync(string[] navigationProps = null)
         {
-            IQueryable<T> query = dbContext.Set<T>().AsNoTracking().Where(x => EF.Property<string>(x, nameof(AssetType.CreatedByUserId)) == operationContext.UserId.ToString());
+            IQueryable<T> query = dbContext.Set<T>().AsNoTracking();
 
             foreach (string navigationProp in navigationProps ?? [])
             {
@@ -78,7 +87,7 @@ namespace InventorySales.Implementations.Repositories
             }
 
             // Fetch the entity by its ID
-            T result = await query.FirstOrDefaultAsync(e => EF.Property<int>(e, key) == id && EF.Property<string>(e, nameof(AssetType.CreatedByUserId)) == operationContext.UserId.ToString());
+            T result = await query.FirstOrDefaultAsync(e => EF.Property<int>(e, key) == id );
 
             if (result == null)
             {
@@ -114,5 +123,6 @@ namespace InventorySales.Implementations.Repositories
                 throw ex;
             }
         }
+       
     }
 }

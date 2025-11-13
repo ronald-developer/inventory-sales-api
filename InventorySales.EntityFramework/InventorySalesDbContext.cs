@@ -1,5 +1,6 @@
 ﻿
 using InventorySales.EntityFramework.Configurations;
+using InventorySales.EntityFramework.Metadata;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 
 // using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
@@ -13,7 +14,8 @@ namespace InventorySales.EntityFramework
         {
         }
 
-        // public DbSet<Expense> Expenses { get; set; }
+        public DbSet<ElementValue> ElementValues { get; set; }
+        public DbSet<MetadataSchemaVersion> MetadataSchemaVersions { get; set; }
         // public DbSet<ExpenseCategory> ExpenseCategories { get; set; }
         protected override void OnModelCreating(ModelBuilder builder)
         {

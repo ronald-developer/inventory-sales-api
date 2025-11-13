@@ -3,8 +3,8 @@ using InventorySales.Api.DTO.AssetType.Models;
 using EntityModels = InventorySales.EntityFramework.Core;
 namespace InventorySales.Api.DTO.AssetType.Responses
 {
-    public class PostUpdateAssetTypeResponse {
-        public PostUpdateAssetTypeResponse(IMapper mapper, EntityModels.AssetType source)
+    public class PutUpdateAssetTypeResponse {
+        public PutUpdateAssetTypeResponse(IMapper mapper, EntityModels.AssetType source)
         {
             Data = mapper.Map<DTOAssetTypeModel>(source);
         }

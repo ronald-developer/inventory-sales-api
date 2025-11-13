@@ -13,7 +13,6 @@ namespace InventorySales.Api.MappingProfiles
             CreateMap<PostCreateAssetTypeRequest, AssetTypeEntryModel>().ReverseMap();
             CreateMap<PutUpdateAssetTypeRequest, AssetTypeEntryModel>().ReverseMap();
             CreateMap<AssetType, DTOAssetTypeModel>().ReverseMap();
-
         }
     }
 }

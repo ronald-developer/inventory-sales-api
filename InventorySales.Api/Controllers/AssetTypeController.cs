@@ -14,25 +14,25 @@ namespace InventorySales.Api.Controllers
     [ApiController]
     public class AssetTypeController : ControllerBase
     {
-        private readonly IAssetTypeEntryService assetTypeService;
-        private readonly IAssetTypeDataService assetTypeDataService;
+        private readonly IAssetTypeEntryService entryService;
+        private readonly IAssetTypeDataService dataService;
         private readonly IMapper mapper;
 
-        public AssetTypeController(IAssetTypeEntryService assetTypeService, IAssetTypeDataService assetTypeDataService, IMapper mapper)
+        public AssetTypeController(IAssetTypeEntryService entryService, IAssetTypeDataService dataService, IMapper mapper)
         {
-            this.assetTypeService = assetTypeService;
-            this.assetTypeDataService = assetTypeDataService;
+            this.entryService = entryService;
+            this.dataService = dataService;
             this.mapper = mapper;
         }
 
         [HttpPost("create")]
-        [Authorize("Administrator")]
+        [Authorize]
         [ApiResponseDocumentation(
                 HttpStatusCode.Unauthorized,
                 HttpStatusCode.InternalServerError)]
         public async Task<PostCreateAssetTypeResponse> CreateAssetType([FromBody] PostCreateAssetTypeRequest request)
         {
-            AssetType result = await assetTypeService.CreateAsync(mapper.Map<AssetTypeEntryModel>(request));
+            AssetType result = await entryService.CreateAsync(mapper.Map<AssetTypeEntryModel>(request));
 
             return new PostCreateAssetTypeResponse(mapper, result);
         }
@@ -44,11 +44,11 @@ namespace InventorySales.Api.Controllers
             HttpStatusCode.NotFound,
             HttpStatusCode.Unauthorized,
             HttpStatusCode.InternalServerError)]
-        public async Task<PostUpdateAssetTypeResponse> UpdateAssetType([FromRoute] int id, [FromBody] PutUpdateAssetTypeRequest request)
+        public async Task<PutUpdateAssetTypeResponse> UpdateAssetType([FromRoute] int id, [FromBody] PutUpdateAssetTypeRequest request)
         {
-            AssetType result = await assetTypeService.UpdateAsync(id, mapper.Map<AssetTypeEntryModel>(request));
+            AssetType result = await entryService.UpdateAsync(id, mapper.Map<AssetTypeEntryModel>(request));
 
-            return new PostUpdateAssetTypeResponse(mapper, result);
+            return new PutUpdateAssetTypeResponse(mapper, result);
         }
 
         [HttpDelete("delete/{id}")]
@@ -59,7 +59,7 @@ namespace InventorySales.Api.Controllers
             HttpStatusCode.InternalServerError)]
         public async Task<ActionResult> DeleteAssetType([FromRoute] int id)
         {
-            await assetTypeService.DeleteAsync(id);
+            await entryService.DeleteAsync(id);
 
             return Ok();
         }
@@ -72,7 +72,7 @@ namespace InventorySales.Api.Controllers
         HttpStatusCode.InternalServerError)]
         public async Task<GetAssetTypeByIdResponse> GetAssetTypeById([FromRoute] int id)
         {
-            AssetType result = await assetTypeDataService.GetByIdAsync(id);
+            AssetType result = await dataService.GetByIdAsync(id);
 
             return new GetAssetTypeByIdResponse(mapper, result);
         }
@@ -85,7 +85,7 @@ namespace InventorySales.Api.Controllers
         HttpStatusCode.InternalServerError)]
         public async Task<GetAllAssetTypesResponse> GetAssetTypeById()
         {
-            IEnumerable<AssetType> result = await assetTypeDataService.GetAllAsync();
+            IEnumerable<AssetType> result = await dataService.GetAllAsync();
 
             return new GetAllAssetTypesResponse(mapper, result);
         }

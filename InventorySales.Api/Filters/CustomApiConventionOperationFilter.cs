@@ -51,8 +51,8 @@ namespace InventorySales.Api.Filters
                         };
 
                     }
-
-                    operation.Responses[statusStr] = response;
+                    var code = $"{(int)statusCode}";
+                    operation.Responses[code] = response;
                 }
             }           
         }

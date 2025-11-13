@@ -7,7 +7,7 @@ namespace InventorySales.Models.ExceptionTypes
     {
         public readonly static HttpStatusCode StatusCode = HttpStatusCode.InternalServerError;
         public readonly static string StatusName = "Internal server error";
-        public InternalServerException(string name, object key) : base($"{name} with key: {key} was not found")
+        public InternalServerException(string name, string message) : base($"{name} error: {message}")
         {
         }
     }

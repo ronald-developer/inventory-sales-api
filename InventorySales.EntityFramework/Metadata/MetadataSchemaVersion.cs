@@ -2,6 +2,11 @@
 
 namespace InventorySales.EntityFramework.Metadata
 {
+    /// <summary>
+    /// Represents a version of the metadata schema for a specific entity (e.g., "Asset", "Customer").
+    /// The <see cref="VersionDescription"/> property should use values from <c>MetadataSchemaVersionStage</c>
+    /// to indicate the stage of the schema version (e.g., Draft, Approved).
+    /// </summary>
     public class MetadataSchemaVersion
     {
         /// <summary>

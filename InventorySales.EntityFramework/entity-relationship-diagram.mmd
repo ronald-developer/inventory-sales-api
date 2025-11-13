@@ -1,0 +1,18 @@
+---
+title: Inventory Sales Entity Relationship Diagram
+---
+erDiagram
+    ASSET ||--|| ASSETTYPE : "has type"
+    ASSET ||--o{ ELEMENTVALUE : "has values"
+    ASSET ||--|| INVENTORY : "belongs to"
+    ASSET ||--o{ SALE : "sold in"
+    ASSETTYPE ||--o{ ASSET : "type of"
+    DATATYPE ||--o{ ELEMENTDEFINITION : "used by"
+    ELEMENTDEFINITION ||--o{ ELEMENTVALUE : "defines"
+    ELEMENTVALUE ||--|| DATATYPE : "is of"
+    ELEMENTVALUE ||--|| ELEMENTDEFINITION : "for"
+    METADATASCHEMAVERSION ||--o{ ELEMENTDEFINITION : "version of"
+    CUSTOMER ||--o{ SALE : "makes"
+    INVENTORY ||--o{ ASSET : "contains"
+    SALE ||--|| CUSTOMER : "to"
+    SALE ||--o{ ASSET : "includes"

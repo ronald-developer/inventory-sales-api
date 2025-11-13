@@ -1,0 +1,13 @@
+Recommended order for creating entity records:
+
+1. DataType  (Needed for ElementDefinition and ElementValue)
+2. MetadataSchemaVersion  (Needed for ElementDefinition)
+3. AssetType  (Needed for Asset)
+4. Customer  (Needed for Sale)
+5. Inventory  (Needed for Asset)
+6. ElementDefinition  (Depends on DataType and MetadataSchemaVersion)
+7. Asset  (Depends on AssetType and Inventory)
+8. Sale  (Depends on Customer and Asset)
+9. ElementValue  (Depends on Asset, ElementDefinition, and DataType)
+
+This order ensures all required parent records exist before creating child records that reference them.
